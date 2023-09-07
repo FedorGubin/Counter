@@ -4,9 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.counter.databinding.MainActivityBinding
-import com.example.counter.databinding.SecondActivityBinding
-import com.example.counter.ui.theme.SecondActivity
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -22,52 +21,57 @@ class MainActivity : AppCompatActivity() {
             if (isButtonsEnabled) {
                 binding.goNextScreen.isEnabled = false
                 binding.newColor.isEnabled = false
-                binding.plus.isEnabled = false
-                binding.minus.isEnabled = false
+                binding.minus.isVisible = false
+                binding.plus.isVisible = false
+                binding.counter.isVisible = false
 
-                binding.hide.text = "Visibility"
+                binding.hide.text = getString(R.string.visible)
 
             } else {
                 binding.goNextScreen.isEnabled = true
                 binding.newColor.isEnabled = true
-                binding.plus.isEnabled = true
-                binding.minus.isEnabled = true
+                binding.plus.isVisible = true
+                binding.minus.isVisible = true
+                binding.counter.isVisible = true
 
-                binding.hide.text = "Hide"
+
+                binding.hide.text = getString(R.string.hide)
 
             }
             isButtonsEnabled = !isButtonsEnabled
         }
-            fun randomColor(): Int {
-                val r = Random.nextInt(256)
-                val g = Random.nextInt(256)
-                val b = Random.nextInt(256)
-                return Color.rgb(r, g, b)
-            }
-            binding.newColor.setOnClickListener {
-                val randomColor = randomColor()
+        fun randomColor(): Int {
+            val r = Random.nextInt(256)
+            val g = Random.nextInt(256)
+            val b = Random.nextInt(256)
+            return Color.rgb(r, g, b)
+        }
+        binding.newColor.setOnClickListener {
+            val randomColor = randomColor()
 
-                binding.counter.setTextColor(randomColor)
-            }
+            binding.counter.setTextColor(randomColor)
+        }
 
-            var counter = 0
+        var counter = 0
+
+        binding.counter.text = counter.toString()
 
 
-            binding.plus.setOnClickListener {
-                counter++
-                binding.counter.text = counter.toString()
-            }
+        binding.plus.setOnClickListener {
+            counter++
+            binding.counter.text = counter.toString()
+        }
 
-            binding.minus.setOnClickListener {
-                counter--
-                binding.counter.text = counter.toString()
-            }
-        var intent = Intent(this@MainActivity, SecondActivity::class.java)
+        binding.minus.setOnClickListener {
+            counter--
+            binding.counter.text = counter.toString()
+        }
+        val intent = Intent(this@MainActivity, SecondActivity::class.java)
         binding.goNextScreen.setOnClickListener {
             startActivity(intent)
         }
-        }
     }
+}
 
 
 
