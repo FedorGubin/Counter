@@ -36,16 +36,10 @@ class MainActivity : AppCompatActivity() {
 
 
                 binding.hide.text = getString(R.string.hide)
-
             }
             isButtonsEnabled = !isButtonsEnabled
         }
-        fun randomColor(): Int {
-            val r = Random.nextInt(256)
-            val g = Random.nextInt(256)
-            val b = Random.nextInt(256)
-            return Color.rgb(r, g, b)
-        }
+
         binding.newColor.setOnClickListener {
             val randomColor = randomColor()
 
@@ -70,5 +64,12 @@ class MainActivity : AppCompatActivity() {
         binding.goNextScreen.setOnClickListener {
             startActivity(intent)
         }
+    }
+
+    private fun randomColor(): Int {
+        val r = Random.nextInt(256)
+        val g = Random.nextInt(256)
+        val b = Random.nextInt(256)
+        return Color.rgb(r, g, b)
     }
 }
