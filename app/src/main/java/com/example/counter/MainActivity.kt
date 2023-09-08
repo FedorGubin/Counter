@@ -5,25 +5,32 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
 import com.example.counter.databinding.MainActivityBinding
 import kotlin.random.Random
 
+
+class MainViewModel : ViewModel() {
+    var counter = 0
+    var isButtonsEnabled = true
+}
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
+    private val viewModel = MainViewModel()
 
-    private var counter = 0
-    private var isButtonsEnabled = true
+
     private fun setCont() {
-        binding.counter.text = counter.toString()
+        binding.counter.text = viewModel.counter.toString()
     }
 
     private fun setEnabledButtons() {
-        binding.goNextScreen.isEnabled = isButtonsEnabled
-        binding.newColor.isEnabled = isButtonsEnabled
-        binding.minus.isVisible = isButtonsEnabled
-        binding.plus.isVisible = isButtonsEnabled
-        binding.counter.isVisible = isButtonsEnabled
-        binding.hide.text = if (isButtonsEnabled) {
+        binding.goNextScreen.isEnabled = viewModel.isButtonsEnabled
+        binding.newColor.isEnabled = viewModel.isButtonsEnabled
+        binding.minus.isVisible = viewModel.isButtonsEnabled
+        binding.plus.isVisible = viewModel.isButtonsEnabled
+        binding.counter.isVisible = viewModel.isButtonsEnabled
+        binding.hide.text = if (viewModel.isButtonsEnabled) {
             getString(R.string.hide)
         } else getString(R.string.visible)
     }
@@ -33,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setEnabledButtons()
         binding.hide.setOnClickListener {
-            isButtonsEnabled = !isButtonsEnabled
+            viewModel.isButtonsEnabled = !viewModel.isButtonsEnabled
             setEnabledButtons()
         }
 
@@ -45,32 +52,18 @@ class MainActivity : AppCompatActivity() {
 
         setCont()
         binding.plus.setOnClickListener {
-            counter++
-            binding.counter.text = counter.toString()
+            viewModel.counter++
+            binding.counter.text = viewModel.counter.toString()
         }
 
         binding.minus.setOnClickListener {
-            counter--
-            binding.counter.text = counter.toString()
+            viewModel.counter--
+            binding.counter.text = viewModel.counter.toString()
         }
         val intent = Intent(this@MainActivity, SecondActivity::class.java)
         binding.goNextScreen.setOnClickListener {
             startActivity(intent)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(counterKey, counter)
-        outState.putBoolean(enabledButtons, isButtonsEnabled)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        counter = savedInstanceState.getInt(counterKey)
-        setCont()
-        isButtonsEnabled = savedInstanceState.getBoolean(enabledButtons)
-        setEnabledButtons()
     }
 
     private fun randomColor(): Int {
