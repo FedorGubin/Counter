@@ -1,13 +1,10 @@
 package com.example.counter
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.example.counter.databinding.MainActivityBinding
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
@@ -18,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.isButtonsEnabledLiveData.observe(this, Observer { isEnabled ->
+        viewModel.isButtonsEnabledLiveData.observe(this) { isEnabled ->
             binding.goNextScreen.isEnabled = isEnabled
             binding.newColor.isEnabled = isEnabled
             binding.plus.isEnabled = isEnabled
@@ -26,24 +23,18 @@ class MainActivity : AppCompatActivity() {
 
             binding.hide.text = if (isEnabled)
                 getString(R.string.hide) else getString(R.string.visibility)
-        })
-
-        viewModel.newColorLiveData.observe(this, Observer { newColors ->
-            binding.counter.setTextColor(newColors)
-        })
-        binding.newColor.setOnClickListener {
-            val randomColor = randomColor()
-            binding.counter.setTextColor(randomColor)
-            viewModel.toggleButtonColor(randomColor)
         }
 
+        viewModel.newColorLiveData.observe(this) { newColors ->
+            binding.counter.setTextColor(newColors)
+        }
+        binding.newColor.setOnClickListener {
+            viewModel.toggleButtonColor()
+        }
 
-
-
-
-        viewModel.counterLiveData.observe(this, Observer { count ->
+        viewModel.counterLiveData.observe(this) { count ->
             binding.counter.text = count.toString()
-        })
+        }
         binding.hide.setOnClickListener {
             viewModel.toggleButtonState()
         }
@@ -59,21 +50,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    fun randomColor(): Int {
-        val r = Random.nextInt(255)
-        val g = Random.nextInt(255)
-        val b = Random.nextInt(255)
-        return Color.rgb(r, g, b)
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
