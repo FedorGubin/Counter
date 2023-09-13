@@ -3,22 +3,16 @@ package com.example.counter
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.example.counter.databinding.MainActivityBinding
 import kotlin.random.Random
 
-
-class MainViewModel : ViewModel() {
-    var counter = 0
-    var isButtonsEnabled = true
-}
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
-    private val viewModel = MainViewModel()
-
+    private val viewModel by viewModels<MainViewModel>()
 
     private fun setCont() {
         binding.counter.text = viewModel.counter.toString()
@@ -34,10 +28,15 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.hide)
         } else getString(R.string.visible)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel.test()
+        viewModel.test3()
+
         setEnabledButtons()
         binding.hide.setOnClickListener {
             viewModel.isButtonsEnabled = !viewModel.isButtonsEnabled
@@ -52,13 +51,15 @@ class MainActivity : AppCompatActivity() {
 
         setCont()
         binding.plus.setOnClickListener {
+            viewModel.test4()
             viewModel.counter++
-            binding.counter.text = viewModel.counter.toString()
+            setCont()
         }
 
         binding.minus.setOnClickListener {
+            viewModel.test2()
             viewModel.counter--
-            binding.counter.text = viewModel.counter.toString()
+            setCont()
         }
         val intent = Intent(this@MainActivity, SecondActivity::class.java)
         binding.goNextScreen.setOnClickListener {
