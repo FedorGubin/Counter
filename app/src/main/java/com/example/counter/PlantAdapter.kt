@@ -1,6 +1,5 @@
 package com.example.counter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,10 @@ import com.example.counter.databinding.PlantItemBinding
 
 
 class PlantAdapter : RecyclerView.Adapter<PlantAdapter.PlantHolder>() {
-    val plantList = ArrayList<Plant>()
+    private val plantList = ArrayList<Plant>()
 
     class PlantHolder(item: View) : ViewHolder(item) {
-        val binding = PlantItemBinding.bind(item)
+        private val binding = PlantItemBinding.bind(item)
         fun bind(plant: Plant) {
             binding.apply {
                 im.setImageResource(plant.imageId)
@@ -37,10 +36,9 @@ class PlantAdapter : RecyclerView.Adapter<PlantAdapter.PlantHolder>() {
         holder.bind(plantList[position])
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addPlant(plant: Plant) {
         plantList.add(plant)
-        notifyDataSetChanged()
+        notifyItemInserted(plantList.size - 1)
     }
 
 }
